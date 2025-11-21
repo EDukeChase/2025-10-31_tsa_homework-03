@@ -1,5 +1,6 @@
 ---
 title: "Homework-3: Time Series"
+subtitle: "[Homework #3 GitHub Repo](https://github.com/EDukeChase/2025-10-31_tsa_homework-03)"
 author: "E. Duke Chase"
 date: today
 ---
@@ -29,6 +30,17 @@ source(here::here("R", "setup.R"))
   \end{center}
 
 - In my opinion, it would be reasonable to assume this is a representative example of a data set that an analyst (such as yourself) could be asked to use in real life to provide educators, school administrators, and policy makers actionable insights on the chronic absenteeism problem for K-12 students. Please answer the following questions using this data set. **Both 4027 and 5027 students need to answer all questions.**
+
+```{r}
+#| label: data prep
+
+c_abs_raw <- read.csv(here("data", "Chronic_Absenteeism.csv"))
+
+c_abs <- c_abs_raw |>
+  rename(year = Year, rate = Rate) |>
+  mutate(year = as.ts(year, start = 2016, freq = 1))
+```
+
 
 (1) One of the main uses of this data would be to assess whether the absenteeism rates are decreasing from a COVID19 related spike.
 
