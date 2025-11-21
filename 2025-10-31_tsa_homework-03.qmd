@@ -1,0 +1,63 @@
+---
+title: "Homework-3: Time Series"
+author: "E. Duke Chase"
+date: today
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+source(here::here("R", "setup.R"))
+```
+
+- Education researchers have documented a problematic post-COVID19 elevation in the rate of chronic absenteeism in students in grades K to 12. That is, the post-COVID19 rate of students missing 10% or more of school days (the definition of chronic absenteeism) continues to be above the rates before the COVID19 pandemic. This has slowed students’ academic recovery from COVID19 disruptions to education.
+
+- There is a link below to a RAND study discussing this topic. For this homework, you will use the rates of chronic absenteeism for students in grades K-12 given in Figure 1 (the Malkus values except for using the RAND estimate for 2024-2025). I also created a data set named “Chronic_Absenteeism.csv” for this Figure. Note, I assigned the rates to August 1st of each academic year.
+
+  \begin{center}
+    \url{https://www.rand.org/pubs/research_reports/RRA956-34.html}
+  \end{center}
+
+  Alternatively, here is some crude R code to make the time series R object ("ts" format) for the data:
+  
+  \begin{center}
+    \begin{tabular}{l}
+      chr.abs.rate=c(13.4,15.2,15.1,13.3,18.9,28.5,25.4,23.5,21.8) \\
+      chr.abs.rate.ts=ts(chr.abs.rate,start=c(2016),freq=1)
+    \end{tabular}
+  \end{center}
+
+- In my opinion, it would be reasonable to assume this is a representative example of a data set that an analyst (such as yourself) could be asked to use in real life to provide educators, school administrators, and policy makers actionable insights on the chronic absenteeism problem for K-12 students. Please answer the following questions using this data set. **Both 4027 and 5027 students need to answer all questions.**
+
+(1) One of the main uses of this data would be to assess whether the absenteeism rates are decreasing from a COVID19 related spike.
+
+    Originally, I was disappointed that I could only find rates back to 2016 (the RAND article was the most credible discussion I felt comfortable using in a class setting). I want more years because I wanted to be reasonably sure I had enough years pre-COVID19 to see a stable estimate of the chronic absenteeism rate that could be a reasonable goal for administrators to aim for now (which in our context could mean trying to model how long until we would predict we had returned to pre-COVID19 rates based on current data trends and patterns).
+    However, then I started thinking that if COVID19 truly was a shock event in the sense that the underlying population model for chronic absenteeism was changed, maybe I actually want fewer pre-COVID19 years affecting my estimates of rates after 2024-2025.
+    *Make a brief argument for or against using pre 2016 data, if it could be found, when making predictions about the chronic absenteeism rate in future years.*
+
+(2) In this question you will explore the idea of finding anomalies and outliers in time series 
+    (a) Use the tsoutliers() function in the forecast package to show there is one anomaly in the time series of chronic absenteeism rates. Explain it in the real world context of this data/problem.
+    (b) This anomaly identifying function is based on the IQR statistic. It is explained more here:
+  
+    \begin{center}
+      \url{https://robjhyndman.com/hyndsight/tsoutliers/}
+    \end{center}
+  
+    In the lectures after the one on anomalies, we have seen that some time series methods work better after the time series has been detrended (for example by using differencing). Make an argument that it would be better or would be worse to find anomalies on the detrended time series instead of the original time series as you did in (a). This can be based on statistics, based on the real-world context of the data, both, or even something else entirely.
+
+(3) I believe there are multiple reasons that the assumptions of an autoregressive model would not be met for the chronic absenteeism time series.
+    (a) If COVID19 was in fact a shock event, explain why an autoregressive model may not be a valid choice for this data.
+    (b) If school administrators change policies yearly, especially in response to observed changes in absentee rates from past policy choices, explain why an autoregressive may would not be a valid choice.
+    
+(4) Even if you argued an autoregressive model would be valid in (3) above, in this question assume it is not (if only to give us a good reason to practice the smoothing models)
+    (a) Why would the Holt-Winters model be inappropriate for this data?
+    (b) Fit the data with the following three models; in addition, use each fitted model to make a prediction for chronic absenteeism rate in 2025-2026 and in 2026-2027 (the next two school years):
+        (i) *Simple Exponential Smoothing* model,
+        (ii) *Holt's Linear Trend model without damping*, and
+        (iii) *Holt's Linear Trend model with damping*. Note: you will get a warning that there is not enough data to use damping. Ignore this warning for our purposes of comparing and contrasting models (for practicing a damped smoothing model).
+    (c) Interpret and compare the values of the prediction intervals resulting from your three models in (b)
+    (d) This data, in my opinion, is an example of a messy time series data for which there isn’t a strongly defensible way to model it. However, if you believe (1) the topic of chronic absenteeism post-COVID19 needs to be studied, and (2) there may not be better time series data on this topic, then perhaps we make the most of the models we have (and be really clear about limitations).
+        (i) Choose 1 of the 3 models you fit in (b) to use to give educators a prediction of the absenteeism rate for the next two academic years. Defend your choice but also explain the model’s/conclusion’s limitations. In your reasoning, you may want to consider the context of the data (you are modeling a potential shock event), justifying the presence or absence of a linear trend, values of the smoothing parameters, error measures, AIC, if you believe the results of the model can be generalized. Your reasoning could include some, none, or all of these things or even something else.
+        (ii) Explain why you do or do not believe it was ethical and/or valid to use the data given in this problem to make conclusions and/or predictions about K-12 student chronic absenteeism rates.
+        (iii) No matter how you answered in (ii), briefly describe at least one other promising approach, using this data or maybe supplementing it with other data in a way that should be feasible to collect, to improve your confidence in any recommendations or conclusions you would give to an education policy maker trying to lower chronic absenteeism rates.
